@@ -9,14 +9,16 @@ jobs:
   hello-world:
     name: Build & Publish
     runs-on: ubuntu-latest
-    env:
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-    with:
-      context: .
-      cache-from: type=gha
-      cache-to: type=gha,mode=max
     steps:
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
     - name: Build & Publish
       run: python scripts/build_and_publish.py
       shell: sh
+      with:
+        context: .
+        cache-from: type=gha
+        cache-to: type=gha,mode=max

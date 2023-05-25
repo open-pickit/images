@@ -11,7 +11,7 @@ def build_and_push_image(image_name, dockerfile_path, repository, tag):
 
 # Example usage
 image_name = "cli-aws-kubectl"
-dockerfile_path = "images/cli-aws-kubectl/Dockerfile"
+dockerfile_path = "docker-images/cli-aws-kubectl/Dockerfile"
 repository = "pickittechnology"
 tag = "latest"
 

@@ -6,7 +6,7 @@ def build_and_push_image(image_name, dockerfile_path, repository, tag):
     subprocess.run(build_command, shell=True, check=True)
 
     # Push the Docker image to a repository
-    push_command = f"docker tag {image_name} {repository}:{tag} && docker push {repository}:{tag}"
+    push_command = f"docker tag {repository}/{image_name}:{tag} && docker push {repository}/{image_name}:{tag}"
     subprocess.run(push_command, shell=True, check=True)
 
 # Example usage

@@ -13,6 +13,7 @@ def login_to_docker():
     # Login to Docker Hub or another container registry
     login_command = f"docker login --username {os.environ['DOCKER_USERNAME']} --password {os.environ['DOCKER_PASSWORD']}"
     subprocess.run(login_command, shell=True, check=True)
+    print("successfuly logged")
 
 def build_and_push_image(image_name, dockerfile_path, repository, tag):
     # Check if the required environment variables are set

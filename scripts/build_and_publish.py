@@ -3,7 +3,7 @@ import subprocess
 
 def build_and_push_image(image_name, dockerfile_path, repository, tag):
     # Set Docker engine
-    build_command = f"docker buildx create --use --driver=docker-containe"
+    build_command = f"docker buildx create --use --driver=docker-container"
     subprocess.run(build_command, shell=True, check=True)
 
     # Build the Docker image

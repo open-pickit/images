@@ -7,12 +7,8 @@ def build_and_push_image(image_name, dockerfile_path, repository, tag):
     subprocess.run(build_command, shell=True, check=True)
 
     # Build the Docker image
-    build_command = f"docker buildx build --cache-from \"type=local,src=./cache\" --cache-to \"type=local,src=./cache\" -t {repository}/{image_name} -f {dockerfile_path} ."
+    build_command = f"docker buildx build --cache-from \"type=local,src=./cache\" --cache-to \"type=local,dest=./cache\" -t {repository}/{image_name}:{tag} -f {dockerfile_path} --push ."
     subprocess.run(build_command, shell=True, check=True)
-
-    # Push the Docker image to a repository
-    push_command = f"docker tag {repository}/{image_name} {repository}/{image_name}:{tag} && docker push {repository}/{image_name}:{tag}"
-    subprocess.run(push_command, shell=True, check=True)
 
 
 # Example usage

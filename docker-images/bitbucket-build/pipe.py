@@ -34,4 +34,4 @@ if(image_init != '' and docker_file_init != ''):
     execute_bash(f"docker build -f {docker_file_init} -t {image_init} .")
     execute_bash(f"docker push {image_init}")
 
-pipe.success(message="Success publishing image")
+pipe.success(message=f"Success publishing {image}")

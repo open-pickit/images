@@ -11,8 +11,7 @@ variables = {
 }
 
 def execute_bash(command:str):
-    build_command = command
-    subprocess.run(build_command, shell=True, check=True)
+    subprocess.run(command, shell=True, check=True)
 
 pipe = Pipe(schema=variables)
 aws_key = pipe.get_variable('AWS_ACCESS_KEY_ID')

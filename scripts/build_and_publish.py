@@ -10,13 +10,11 @@ def set_docker_engine():
 
 
 def build_and_push_image(image_name, tag):
-    dockerfile_path = os.path.join(images_base_dir, image_name)
+    dockerfile_path = os.path.join(images_base_dir, image_name, "Dockerfile")
     repository = "pickittechnology"
 
     # Build the Docker image
-    subprocess.run(f"cd {dockerfile_path}", shell=True, check=True)
-    build_command = f"docker buildx build --cache-from \"type=local,src=../../cache\" --cache-to \"type=local,dest=../../cache\" -t {repository}/{image_name}:{tag} --push ."
-    subprocess.run(f"cd ../..", shell=True, check=True)
+    build_command = f"docker buildx build --cache-from \"type=local,src=./cache\" --cache-to \"type=local,dest=./cache\" -t {repository}/{image_name}:{tag} -f {dockerfile_path} --push ."
     subprocess.run(build_command, shell=True, check=True)
 
 

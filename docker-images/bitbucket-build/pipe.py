@@ -29,8 +29,9 @@ execute_bash(f"aws configure set aws_secret_access_key {aws_secret}")
 execute_bash(f"eval $(aws ecr get-login --no-include-email --region us-west-2 | sed 's;https://;;g')")
 execute_bash(f"docker build -f {docker_file} -t {image} .")
 execute_bash(f"docker push {image}")
-#TODO - make init conditional
-execute_bash(f"docker build -f {docker_file_init} -t {image_init} .")
-execute_bash(f"docker push {image_init}")
+
+if(image_init != '' and docker_file_init != ''):
+    execute_bash(f"docker build -f {docker_file_init} -t {image_init} .")
+    execute_bash(f"docker push {image_init}")
 
 pipe.success(message="Success!")

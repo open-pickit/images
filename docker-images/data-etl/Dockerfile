@@ -6,6 +6,6 @@ RUN apt-get update
 RUN apt-get install -y groff
 
 # install zip
-RUN apk add zip
+RUN apt-get install zip
 
 ENTRYPOINT ["/bin/bash"]

@@ -21,6 +21,4 @@ execute_bash(f"docker build -f {docker_file} -t {image} .")
 pipe.log_info("saving image...")
 execute_bash(f"docker save {image} > {image}.tar")
 
-execute_bash(f"ls")
-
 pipe.success(message=f"Success building {image}")

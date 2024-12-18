@@ -4,6 +4,7 @@ import subprocess
 variables = {
     'AWS_ACCESS_KEY_ID': {'type': 'string', 'required': True},
     'AWS_SECRET_ACCESS_KEY': {'type': 'string', 'required': True},
+    'IMAGE': {'type': 'string', 'required': True},
     'DEPLOY_NAME': {'type': 'string', 'required': True},
     'NAMESPACE': {'type': 'string', 'required': True},
 }
@@ -14,6 +15,7 @@ def execute_bash(command:str):
 pipe = Pipe(schema=variables)
 aws_key = pipe.get_variable('AWS_ACCESS_KEY_ID')
 aws_secret = pipe.get_variable('AWS_SECRET_ACCESS_KEY')
+image = pipe.get_variable('IMAGE')
 deploy_name = pipe.get_variable('DEPLOY_NAME')
 namespace = pipe.get_variable('NAMESPACE')
 
@@ -26,6 +28,12 @@ execute_bash("aws eks update-kubeconfig --name eks-cluster --region us-west-2")
 
 pipe.log_info("loading images...")
 execute_bash(f"docker load < ms.tar")
+
+pipe.log_info("tagging images...")
+execute_bash(f"docker tag ms:latest {image}")
+
+pipe.log_info("uploading images...")
+execute_bash(f"docker push {image}")
 
 pipe.log_info("deploying...")
 execute_bash(f"kubectl rollout restart deployment {deploy_name} -n {namespace}")

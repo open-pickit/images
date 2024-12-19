@@ -26,4 +26,10 @@ set_docker_engine()
 images_dirs = [d for d in os.listdir(images_base_dir) if os.path.isdir(os.path.join(images_base_dir, d))]
 
 for image in images_dirs:
+    
+    if (image == 'bitbucket-build-2'):
+        tag = '2.0.0'
+    else:
+        tag = 'latest'
+    
     build_and_push_image(image, tag)

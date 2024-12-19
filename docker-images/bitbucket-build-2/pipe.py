@@ -17,7 +17,7 @@ npmrc = pipe.get_variable('NPMRC_FILE')
 
 pipe.log_info("Executing the pipe...")
 
-pipe.log_info("Creating npmrc...")
+pipe.log_info("Creating npmrc...") 
 execute_bash(f"echo {npmrc} | base64 -d > .npmrc")
 
 pipe.log_info("building image...")

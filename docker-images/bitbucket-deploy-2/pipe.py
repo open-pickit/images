@@ -24,6 +24,7 @@ pipe.log_info("Executing the pipe...")
 pipe.log_info("log into ecr...")
 execute_bash(f"aws configure set aws_access_key_id {aws_key}")
 execute_bash(f"aws configure set aws_secret_access_key {aws_secret}")
+execute_bash(f"eval $(aws ecr get-login --no-include-email --region us-west-2 | sed 's;https://;;g')")
 execute_bash("aws eks update-kubeconfig --name eks-cluster --region us-west-2")
 
 pipe.log_info("loading images...")

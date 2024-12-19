@@ -21,13 +21,13 @@ namespace = pipe.get_variable('NAMESPACE')
 
 pipe.log_info("Executing the pipe...")
 
-pipe.log_info("log into ecr...:" + aws_key)
+pipe.log_info("log into ecr...")
 execute_bash(f"aws configure set aws_access_key_id {aws_key}")
 execute_bash(f"aws configure set aws_secret_access_key {aws_secret}")
 execute_bash("aws eks update-kubeconfig --name eks-cluster --region us-west-2")
 
 pipe.log_info("loading images...")
-execute_bash(f"docker load < ms.tar")
+execute_bash(f"docker load < ms:latest.tar")
 
 pipe.log_info("tagging images...")
 execute_bash(f"docker tag ms:latest {image}")

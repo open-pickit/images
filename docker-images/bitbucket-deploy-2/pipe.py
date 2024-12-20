@@ -41,7 +41,7 @@ pipe.log_info("uploading images...")
 execute_bash(f"docker push {image}")
 
 pipe.log_info("tagging images...")
-execute_bash(f"docker buildx imagetools create {get_registry()}/{image} --tag {get_registry()}/deleteme:staging")
+execute_bash(f"docker buildx imagetools create {image} --tag {get_registry()}/deleteme:staging")
 
 pipe.log_info("deploying...")
 execute_bash(f"kubectl rollout restart deployment {deploy_name} -n {namespace}")

@@ -12,6 +12,10 @@ variables = {
 def execute_bash(command:str):
     subprocess.run(command, shell=True, check=True)
 
+def get_registry():
+    result = subprocess.run("aws sts get-caller-identity --query 'Account' --output text", shell=True, capture_output=True, text=True)
+    return f"{result.stdout.strip()}.dkr.ecr.us-west-2.amazonaws.com"
+
 pipe = Pipe(schema=variables)
 aws_key = pipe.get_variable('AWS_ACCESS_KEY_ID')
 aws_secret = pipe.get_variable('AWS_SECRET_ACCESS_KEY')
@@ -35,6 +39,9 @@ execute_bash(f"docker tag ms:latest {image}")
 
 pipe.log_info("uploading images...")
 execute_bash(f"docker push {image}")
+
+pipe.log_info("tagging images...")
+execute_bash(f"docker buildx imagetools create {get_registry()}/{image} --tag {get_registry()}/deleteme:staging")
 
 pipe.log_info("deploying...")
 execute_bash(f"kubectl rollout restart deployment {deploy_name} -n {namespace}")

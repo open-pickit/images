@@ -44,7 +44,7 @@ def get_image_name(env: str):
     if first_word not in valid_words:
         raise ValueError(f"Invalid first word: '{first_word}'. Must be one of {valid_words}.")
     
-    return f"{first_word}-{env}-{rest_of_string}-{version}" 
+    return f"{first_word}-{env}-{rest_of_string}:{version}" 
 
 
 def execute_bash(command:str):

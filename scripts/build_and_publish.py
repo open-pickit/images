@@ -28,7 +28,7 @@ images_dirs = [d for d in os.listdir(images_base_dir) if os.path.isdir(os.path.j
 for image in images_dirs:
     
     if (image == 'bitbucket-build-2'):
-        tag = '2.0.0'
+        tag = '2.0.1'
     else:
         tag = 'latest'
     

@@ -31,7 +31,7 @@ def get_data_from_package_json():
     
     return name, version
 
-def get_image_name(env: str):
+def get_image_name(env: str, img: str):
     name, version = get_data_from_package_json()
 
     parts = name.split('-', 1)
@@ -44,7 +44,10 @@ def get_image_name(env: str):
     if first_word not in valid_words:
         raise ValueError(f"Invalid first word: '{first_word}'. Must be one of {valid_words}.")
     
-    return f"{first_word}-{env}-{rest_of_string}:{version}" 
+    if(img == "Dockerfile.init"):
+        return f"{first_word}-{env}-{rest_of_string}-init:{version}" 
+    else:
+        return f"{first_word}-{env}-{rest_of_string}:{version}" 
 
 
 def execute_bash(command:str):
@@ -54,6 +57,22 @@ def get_registry():
     result = subprocess.run("aws sts get-caller-identity --query 'Account' --output text", shell=True, capture_output=True, text=True)
     return f"{result.stdout.strip()}.dkr.ecr.us-west-2.amazonaws.com"
 
+def find_docker_files():
+    # List to store found files
+    docker_files = []
+    
+    # Walk through the root directory
+    for root, _, files in os.walk("."):
+        for file in files:
+            if file in ["Dockerfile", "Dockerfile.init"]:
+                file_path = os.path.join(root, file)
+                docker_files.append(file_path)
+    
+    # Iterate over the list and print filenames
+    pipe.log_info("Docker Files found:")
+    for file in docker_files:
+        pipe.log_info(file)
+
 pipe = Pipe(schema=variables)
 
 aws_key = pipe.get_variable('AWS_ACCESS_KEY_ID')
@@ -61,9 +80,6 @@ aws_secret = pipe.get_variable('AWS_SECRET_ACCESS_KEY')
 npmrc = pipe.get_variable('NPMRC_FILE')
 
 pipe.log_info("Executing the pipe...")
-
-image = get_image_name(pipe.get_variable('ENV'))
-pipe.log_info(f"building image: {image}")
 
 pipe.log_info("log into ecr...")
 execute_bash(f"aws configure set aws_access_key_id {aws_key}")
@@ -76,13 +92,15 @@ pipe.log_info(f"registry: {registry}")
 pipe.log_info("Creating npmrc...") 
 execute_bash(f"echo {npmrc} | base64 -d > .npmrc")
 
-pipe.log_info("building image...")
-execute_bash(f"docker build -f Dockerfile -t {registry}/{image} .")
+images = find_docker_files()
+for img in images:
+    image = get_image_name(pipe.get_variable('ENV'))
+    pipe.log_info(f"detected image: {image}")
 
-pipe.log_info("publishing...")
-execute_bash(f"docker push {registry}/{image}")
+    pipe.log_info("building image...")
+    execute_bash(f"docker build -f Dockerfile -t {registry}/{image} .")
 
-""" pipe.log_info("saving image...")
-execute_bash(f"docker save {image} > {image}.tar") """
+    pipe.log_info("publishing...")
+    execute_bash(f"docker push {registry}/{image}")
 
 pipe.success(message=f"Success publishing {image}")

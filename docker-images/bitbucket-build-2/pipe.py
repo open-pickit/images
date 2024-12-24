@@ -64,6 +64,7 @@ def find_docker_files():
     # Walk through the root directory
     for root, _, files in os.walk("."):
         for file in files:
+            pipe.log_info(file)
             if file in ["Dockerfile", "Dockerfile.init"]:
                 file_path = os.path.join(root, file)
                 docker_files.append(file_path)

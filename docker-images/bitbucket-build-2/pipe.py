@@ -95,7 +95,7 @@ execute_bash(f"echo {npmrc} | base64 -d > .npmrc")
 
 images = find_docker_files()
 for img in images:
-    image = get_image_name(pipe.get_variable('ENV'))
+    image = get_image_name(pipe.get_variable('ENV'), img)
     pipe.log_info(f"detected image: {image}")
 
     pipe.log_info("building image...")

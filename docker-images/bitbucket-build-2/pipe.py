@@ -64,15 +64,15 @@ def find_docker_files():
     # Walk through the root directory
     for root, _, files in os.walk("."):
         for file in files:
-            pipe.log_info(file)
             if file in ["Dockerfile", "Dockerfile.init"] and root == ".":
-                file_path = os.path.join(root, file)
-                docker_files.append(file_path)
+                docker_files.append(file)
     
     # Iterate over the list and print filenames
     pipe.log_info("Docker Files found:")
     for file in docker_files:
         pipe.log_info(file)
+    
+    return docker_files
 
 pipe = Pipe(schema=variables)
 

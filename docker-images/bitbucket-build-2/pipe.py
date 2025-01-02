@@ -99,7 +99,7 @@ for img in images:
     pipe.log_info(f"detected image: {image}")
 
     pipe.log_info("building image...")
-    execute_bash(f"docker build -f Dockerfile -t {registry}/{image} .")
+    execute_bash(f"docker build -f {img} -t {registry}/{image} .")
 
     pipe.log_info("publishing...")
     execute_bash(f"docker push {registry}/{image}")

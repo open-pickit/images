@@ -101,13 +101,13 @@ for img in images:
 pipe.log_info("deploying...")
 namespace, project_name, version = get_data_from_package_json()
 
+deploy_name = f"{namespace}-{project_name}"
+pipe.log_info(f"deploy_name: {deploy_name}")
+
 if(namespace == 'pickers'):
     pipe.log_warning('rename \'ms\' namespace to \'pickers\'')
     namespace = 'ms'
 pipe.log_info(f"namespace: {namespace}")
-
-deploy_name = f"{namespace}-{project_name}"
-pipe.log_info(f"deploy_name: {deploy_name}")
 
 execute_bash(f"kubectl rollout restart deployment {deploy_name} -n {namespace}")
 execute_bash(f"kubectl rollout status deploy/{deploy_name} -n {namespace}")
